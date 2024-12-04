@@ -1,0 +1,214 @@
+---
+openapi: 3.0.0
+info:
+  title: NoSQL-capstone
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /users:
+    get:
+      tags:
+        - User
+      summary: get all users
+      operationId: getAllUsers
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      tags:
+        - User
+      summary: create a new user
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "201":
+          description: Created.
+  /users/{userId}:
+    get:
+      tags:
+        - User
+      summary: get information about the user
+      operationId: getUser
+      parameters:
+        - $ref: '#/components/parameters/UserIdPathParam'
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: User not found.
+  /users/{userId}/tasks:
+    get:
+      tags:
+        - Task
+      summary: get all tasks for the user
+      operationId: getTasksForUser
+      parameters:
+        - $ref: '#/components/parameters/UserIdPathParam'
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+    post:
+      tags:
+        - Task
+      summary: create a new task
+      operationId: createTask
+      parameters:
+        - $ref: '#/components/parameters/UserIdPathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+        required: true
+      responses:
+        "201":
+          description: Created.
+          
+  /users/{userId}/tasks/{taskId}:
+    get:
+      tags:
+        - Task
+      summary: get information about the task
+      operationId: getTask
+      parameters:
+        - $ref: '#/components/parameters/UserIdPathParam'
+        - $ref: '#/components/parameters/TaskIdPathParam'
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        "404":
+          description: Task not found.
+    patch:
+      tags:
+        - Task
+      summary: change status of the task
+      operationId: updateStatus
+      parameters:
+        - $ref: '#/components/parameters/UserIdPathParam'
+        - $ref: '#/components/parameters/TaskIdPathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusDto'
+        required: true
+      responses:
+        "200":
+          description: Ok.
+        "404":
+          description: Task not found.
+    delete:
+      tags:
+        - Task
+      summary: delete the task
+      operationId: deleteTask
+      parameters:
+        - $ref: '#/components/parameters/UserIdPathParam'
+        - $ref: '#/components/parameters/TaskIdPathParam'
+      responses:
+        "200":
+          description: Ok.
+  
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: "ffba6889-5e2b-42bf-95a5-aadb0ae10c68"
+        email:
+          type: string
+          format: email
+          example: "some.mail@gmail.com"
+        username:
+          type: string
+          example: "myName"
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: "8b821536-6682-462a-b04e-a55c8cce30b4"
+        userId:
+          type: string
+          format: uuid
+          readOnly: true
+          example: "ffba6889-5e2b-42bf-95a5-aadb0ae10c68"
+        title:
+          type: string
+          example: "Cleaning"
+        description:
+          type: string
+          example: "Clean up a house"
+        status:
+          type: string
+          readOnly: true
+          enum:
+            - CREATED
+            - IN_PROGRESS
+            - COMPLETED
+            - POSTPONED
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+    StatusDto:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - CREATED
+            - IN_PROGRESS
+            - COMPLETED
+            - POSTPONED
+  parameters:
+    UserIdPathParam:
+      name: userId
+      in: path
+      required: true
+      description: user id
+      schema:
+        type: string
+        format: uuid
+        example: "ffba6889-5e2b-42bf-95a5-aadb0ae10c68"
+    TaskIdPathParam:
+      name: taskId
+      in: path
+      required: true
+      description: task id
+      schema:
+        type: string
+        format: uuid
+        example: "8b821536-6682-462a-b04e-a55c8cce30b4"
