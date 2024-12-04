@@ -1,4 +1,4 @@
-# No SQL Capstone Project
+# NoSQL Capstone Project
 
 ## Starting the project
 
