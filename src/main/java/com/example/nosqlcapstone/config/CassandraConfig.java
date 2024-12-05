@@ -18,7 +18,6 @@ import java.util.List;
 public class CassandraConfig extends AbstractCassandraConfiguration {
 
     private String contactPoints;
-    private int port;
     private String keyspaceName;
     private String basePackages;
 
@@ -31,12 +30,6 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
     protected String getContactPoints() {
         return contactPoints;
     }
-
-    @Override
-    protected int getPort() {
-        return port;
-    }
-
     @Override
     public String[] getEntityBasePackages() {
         return new String[] {basePackages};
