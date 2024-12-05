@@ -7,7 +7,7 @@ services:
     environment:
       - CASSANDRA_CLUSTER_NAME=TaskManagerCluster
       - CASSANDRA_NUM_TOKENS=12
-      - CASSANDRA_SEEDS=cassandra-node2
+      - CASSANDRA_SEEDS=cassandra-node2,cassandra-node3
     volumes:
       - "cassandra_data1:/var/lib/cassandra"
     networks:
@@ -22,7 +22,7 @@ services:
     environment:
       - CASSANDRA_CLUSTER_NAME=TaskManagerCluster
       - CASSANDRA_NUM_TOKENS=12
-      - CASSANDRA_SEEDS=cassandra-node1
+      - CASSANDRA_SEEDS=cassandra-node1,cassandra-node3
     volumes:
       - "cassandra_data2:/var/lib/cassandra"
     networks:
@@ -37,7 +37,7 @@ services:
     environment:
       - CASSANDRA_CLUSTER_NAME=TaskManagerCluster
       - CASSANDRA_NUM_TOKENS=12
-      - CASSANDRA_SEEDS=cassandra-node1
+      - CASSANDRA_SEEDS=cassandra-node1,cassandra-node2
     volumes:
       - "cassandra_data3:/var/lib/cassandra"
     networks:
