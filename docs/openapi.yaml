@@ -140,7 +140,7 @@ components:
     User:
       type: object
       properties:
-        id:
+        userId:
           type: string
           format: uuid
           readOnly: true
@@ -155,7 +155,7 @@ components:
     Task:
       type: object
       properties:
-        id:
+        taskId:
           type: string
           format: uuid
           readOnly: true

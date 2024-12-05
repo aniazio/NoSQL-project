@@ -5,6 +5,7 @@ import com.example.nosqlcapstone.model.Task;
 import com.example.nosqlcapstone.model.User;
 import com.example.nosqlcapstone.service.TaskService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class TaskController {
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createUser(@RequestBody User user, HttpServletResponse response) {
+    public void createUser(@RequestBody @Valid User user, HttpServletResponse response) {
         log.debug(String.format("Task controller; createUser for user = %1s", user.toString()));
         User createdUser = taskService.createUser(user);
         response.addHeader("Location", String.format("/users/%1s", createdUser.getUserId()));
@@ -41,7 +42,7 @@ public class TaskController {
 
     @PostMapping("/users/{userId}/tasks")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createTask(@PathVariable String userId, @RequestBody Task task, HttpServletResponse response) {
+    public void createTask(@PathVariable String userId, @RequestBody @Valid Task task, HttpServletResponse response) {
         log.debug(String.format("Task controller; create task for userId = %1s and task = %2s", userId, task.toString()));
         Task created = taskService.createTask(userId, task);
         response.addHeader("Location", String.format("/users/%1s/tasks/%2s", userId, created.getTaskId()));
@@ -60,7 +61,7 @@ public class TaskController {
     }
 
     @PatchMapping("/users/{userId}/tasks/{taskId}")
-    public Task updateStatus(@PathVariable String userId, @PathVariable String taskId, @RequestBody StatusDto newStatus) {
+    public Task updateStatus(@PathVariable String userId, @PathVariable String taskId, @RequestBody @Valid StatusDto newStatus) {
         log.debug(String.format("Task controller; updateStatus with userId = %1s and taskId = %2s and new status = %3s", userId, taskId, newStatus.getStatus()));
         return taskService.updateStatus(userId, taskId, newStatus);
     }
