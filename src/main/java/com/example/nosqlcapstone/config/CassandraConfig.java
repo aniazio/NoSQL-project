@@ -1,15 +1,13 @@
 package com.example.nosqlcapstone.config;
 
+import com.datastax.oss.driver.api.core.config.DefaultDriverOption;
+import java.util.List;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
-import org.springframework.data.cassandra.config.SchemaAction;
+import org.springframework.data.cassandra.config.*;
 import org.springframework.data.cassandra.core.cql.keyspace.CreateKeyspaceSpecification;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
-
-import java.util.List;
-
 
 @EnableCassandraRepositories
 @Configuration
@@ -45,7 +43,13 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
         final CreateKeyspaceSpecification specification =
                 CreateKeyspaceSpecification.createKeyspace(keyspaceName)
                         .ifNotExists()
-                        .withSimpleReplication(2);
+                        .withSimpleReplication(3);
         return List.of(specification);
     }
+
+    @Override
+    protected DriverConfigLoaderBuilderConfigurer getDriverConfigLoaderBuilderConfigurer() {
+        return driverLoader -> driverLoader.withString(DefaultDriverOption.REQUEST_CONSISTENCY, "QUORUM");
+    }
+
 }
